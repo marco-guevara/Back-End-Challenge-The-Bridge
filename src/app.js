@@ -46,10 +46,10 @@ app.use(
     },
   })
 );
-// app.use(cors({
-//   origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite peticiones desde el frontend React // REVIEW: Añadir URL despliegue en FRONTEND_URL del .env
-//   credentials: true, // Acepta cookies enviadas por el frontend
-// }));
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite peticiones desde el frontend React // REVIEW: Añadir URL despliegue en FRONTEND_URL del .env
+  credentials: true, // Acepta cookies enviadas por el frontend
+}));
 
 // Usamos rutas
 app.use("/api/auth", authRoutes)
@@ -72,7 +72,9 @@ app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });
 });
 
-// Escuchar en puerto
-app.listen(PORT, () => {
-  console.log(`API escuchando en http://localhost:${PORT}`);
-});
+// // Escuchar en puerto
+// app.listen(PORT, () => {
+//   console.log(`API escuchando en http://localhost:${PORT}`);
+// });
+
+module.exports = app
