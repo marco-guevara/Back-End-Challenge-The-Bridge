@@ -72,7 +72,9 @@ app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });
 });
 
-// Escuchar en puerto
-app.listen(PORT, () => {
-  console.log(`API escuchando en http://localhost:${PORT}`);
-});
+// // Escuchar en puerto
+// app.listen(PORT, () => {
+//   console.log(`API escuchando en http://localhost:${PORT}`);
+// });
+
+module.exports = app
