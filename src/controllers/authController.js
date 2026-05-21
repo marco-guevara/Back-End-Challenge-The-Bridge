@@ -1,15 +1,21 @@
-const bcrypt = require('bcryptjs')
-const {createAccessToken} = require('../services/auth.services')
-const accessTokenCookieConfig = require('../config/cookie.config')
-const User = require('../models/User')
+const User = require("../models/User");
 
+const bcrypt = require("bcryptjs");
+
+const { createAccessToken } = require("../services/auth.services");
+const accessTokenCookieConfig = require("../config/cookie.config");
 
 // POST
 // /api/auth/register
 const register = async (req, res) => {
-  const {email, name, password, password2} = req.body
-  if (!email || !name || !password) {
-    return res.status(400).json({message: "Email, name and password required"})
+  const { email, name, password, confirmPassword } = req.body;
+  if (!name || !email || !password || !confirmPassword) {
+    return res
+      .status(400)
+      .json({
+        message:
+          "Faltan datos obligatorios: email, nombre, contraseña y confirmar contraseña",
+      });
   }
 
   //  REGEX EMAIL (válido estándar)
@@ -22,7 +28,7 @@ const register = async (req, res) => {
   // 1 número
   // 1 carácter especial
   const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{6,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
 
   if (!emailRegex.test(email)) {
     return res
@@ -37,78 +43,77 @@ const register = async (req, res) => {
     });
   }
 
-  if (password !== password2) {
-    return res.status(400).json({message: "Password dosen't match"})
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: "Las contraseñas no coinciden" });
   }
 
   try {
-    const existingUser = await User.findOne({where: {email}})
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res.status(400).json({message: "Email already in use"})
+      return res.status(400).json({ message: "Email ya registrado" });
     }
 
-    const password_hash = await bcrypt.hash(password, 10)
+    const password_hash = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
       name,
       email,
       password: password_hash,
-      role: 'user'
-    })
+    });
 
-    res.status(201).json({message: `User ${newUser.name} created successfully`})
-
+    res
+      .status(201)
+      .json({ message: `Usuario ${newUser.name} creado correctamente` });
   } catch (err) {
-    res.status(500).json({message: `Server error: ${err.message}`})
+    res.status(500).json({ message: `Error del servidor: ${err.message}` });
   }
-  
-}
-
+};
 
 // POST
 // /api/auth/login
 const login = async (req, res) => {
-  const {email, password} = req.body
+  const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({message: "Email and password required"})
+    return res
+      .status(400)
+      .json({ message: "Faltan datos obligatorios: email, contraseña" });
   }
 
   try {
-    const user = await User.findOne({where: {email}})
+    const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return res.status(400).json({message: "Invalid email or password."})
+      return res.status(400).json({ message: "Credenciales inválidas" });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password)
+    const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(400).json({message: "Invalid email or password"})
+      return res.status(400).json({ message: "Credenciales inválidas" });
     }
 
-    const accessToken = createAccessToken(user)
+    const accessToken = createAccessToken(user);
 
-    res.cookie("accessToken", accessToken, accessTokenCookieConfig)
+    res.cookie("accessToken", accessToken, accessTokenCookieConfig);
 
     return res.status(200).json({
-      message: "Login successfull",
+      message: "Login successful",
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: user.role
       },
-    })
+    });
   } catch (err) {
-    res.status(500).json({message: `Server error: ${err.message}`})
+    res.status(500).json({ message: `Error del servidor: ${err.message}` });
   }
-}
+};
 
 // POST
 // /api/auth/logout
-const logout = ( req, res) => {
+const logout = (req, res) => {
   res.clearCookie("accessToken", accessTokenCookieConfig);
-  return res.status(200).json({message: "logged out"});
+  return res.status(200).json({ message: "Sesión cerrada" });
 };
 
 // const changePassword = async (req, res) => {
@@ -132,7 +137,7 @@ const logout = ( req, res) => {
 //     await user.update({password: password_hash})
 
 //     return res.status(202).json({message: 'password changed'})
-    
+
 //   } catch (err) {
 //     res.status(500).json({message: `Server error: ${err.message}`})
 //   }
@@ -154,6 +159,5 @@ module.exports = {
   login,
   logout,
   // changePassword,
-  getActiveUser
-
-}
+  getActiveUser,
+};
