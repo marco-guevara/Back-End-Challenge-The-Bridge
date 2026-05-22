@@ -1,14 +1,18 @@
 require("dotenv").config();
 
-const inputUrl = process.argv[2] || process.env.DB_HOST;
+const inputUrl = process.argv[2];
 
-if (!inputUrl) {
-  // eslint-disable-next-line no-console
-  console.error("Missing DATABASE_URL. Use: node create-tables.js \"postgresql://...\"");
-  return;
+if (inputUrl) {
+  process.env.DATABASE_URL = inputUrl;
 }
 
-process.env.DATABASE_URL = inputUrl;
+if (!process.env.DATABASE_URL && !process.env.DB_NAME) {
+  // eslint-disable-next-line no-console
+  console.error(
+    "Missing database config. Set DATABASE_URL or local DB_* values.",
+  );
+  return;
+}
 
 const sequelize = require("./src/config/db");
 require("./src/models/User");
@@ -19,7 +23,7 @@ async function createTables() {
     await sequelize.authenticate();
     await sequelize.sync();
     // eslint-disable-next-line no-console
-    console.log("Tabbles created or already exists in PostgreSQL");
+    console.log("Tables created or already exist in PostgreSQL");
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error creating tables:", error.message || error);
