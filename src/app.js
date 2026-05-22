@@ -4,7 +4,6 @@ const cookieParser = require("cookie-parser"); // Permite leer las cookies del n
 const morgan = require("morgan"); // Obtención de logs detallados de las llamadas a la API
 const helmet = require("helmet"); // Añade protecciones de seguridad HTTP automáticamente
 const cors = require("cors"); // Permite que otros “orígenes” puedan hacer peticiones a tu backend.
-require("dotenv").config();
 
 // Documentación Swagger
 // const swaggerUi = require("swagger-ui-express"); // Librería con una interfaz visual para la documentación con los endpoints
@@ -46,10 +45,10 @@ app.use(
     },
   })
 );
-// app.use(cors({
-//   origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite peticiones desde el frontend React // REVIEW: Añadir URL despliegue en FRONTEND_URL del .env
-//   credentials: true, // Acepta cookies enviadas por el frontend
-// }));
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Permite peticiones desde el frontend React // REVIEW: Añadir URL despliegue en FRONTEND_URL del .env
+  credentials: true, // Acepta cookies enviadas por el frontend
+}));
 
 // Usamos rutas
 app.use("/api/auth", authRoutes)
@@ -72,7 +71,9 @@ app.use((req, res) => {
   res.status(404).json({ message: "Ruta no encontrada" });
 });
 
-// Escuchar en puerto
-app.listen(PORT, () => {
-  console.log(`API escuchando en http://localhost:${PORT}`);
-});
+// // Escuchar en puerto
+// app.listen(PORT, () => {
+//   console.log(`API escuchando en http://localhost:${PORT}`);
+// });
+
+module.exports = app
