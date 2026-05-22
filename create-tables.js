@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const inputUrl = process.argv[2];
 
 if (inputUrl) {

@@ -4,7 +4,6 @@ const cookieParser = require("cookie-parser"); // Permite leer las cookies del n
 const morgan = require("morgan"); // Obtención de logs detallados de las llamadas a la API
 const helmet = require("helmet"); // Añade protecciones de seguridad HTTP automáticamente
 const cors = require("cors"); // Permite que otros “orígenes” puedan hacer peticiones a tu backend.
-require("dotenv").config();
 
 // Documentación Swagger
 // const swaggerUi = require("swagger-ui-express"); // Librería con una interfaz visual para la documentación con los endpoints
