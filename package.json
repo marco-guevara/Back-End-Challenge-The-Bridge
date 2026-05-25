@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db:sync": "node --env-file=.env create-tables.js",
-    "dev": "node --env-file=.env --watch src/server.js",
-    "start": "node --env-file=.env src/server.js",
+    "dev": "node --env-file=.env.local --watch src/server.js",
+    "start:local": "node --env-file=.env.local src/server.js",
+    "start": "node --env-file=.env.prod src/server.js",
+    "db:sync:local": "node --env-file=.env.local create-tables.js",
+    "db:sync:prod": "node --env-file=.env.prod create-tables.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
