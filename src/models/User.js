@@ -26,6 +26,11 @@ const User = sequelize.define(
             allowNull: false,
             field: "password_hash",
         },
+        role: {
+          type: DataTypes.ENUM("junior", "senior"),
+          allowNull: false,
+          defaultValue: "junior"
+        }
         
     },
     {
