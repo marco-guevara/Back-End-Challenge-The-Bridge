@@ -1,15 +1,12 @@
 const app = require("./app");
-const sequelize = require("./config/db");
+const db = require("./config/db");
 
 const PORT = process.env.PORT || 4000;
 
 async function startServer() {
   try {
-    await sequelize.authenticate();
+    await db.query("SELECT 1");
     console.log("Postgres connected");
-
-    await sequelize.sync();
-    console.log("Models synchronized");
 
     app.listen(PORT, () => {
       console.log(`Servidor escuchando en http://localhost:${PORT}`);
