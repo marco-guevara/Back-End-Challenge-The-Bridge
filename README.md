@@ -1,25 +1,19 @@
 # Back Challenge API
 
-## Entornos
+## Entorno
 
-El backend usa archivos de entorno separados para cambiar rapido entre
-desarrollo y produccion.
+El backend usa un unico archivo `.env` para conectarse a la base de datos
+PostgreSQL desplegada por el equipo de Data Science.
 
-| Entorno | Ejemplo | Archivo real | Arranque |
-| --- | --- | --- | --- |
-| Desarrollo | `.env.local.example` | `.env.local` | `npm run dev` |
-| Produccion | `.env.prod.example` | `.env.prod` | `npm start` |
-
-Los archivos reales `.env.local` y `.env.prod` estan ignorados por Git. Crea
-cada uno a partir de su ejemplo y sustituye passwords, URLs y secretos.
+El archivo real `.env` esta ignorado por Git. Crealo a partir del ejemplo y
+sustituye host, credenciales y secretos.
 
 ```powershell
-Copy-Item .env.local.example .env.local
-Copy-Item .env.prod.example .env.prod
+Copy-Item .env.example .env
 ```
 
-`NODE_ENV` forma parte de cada archivo. En produccion activa cookies `secure`
-con `sameSite=none`; en local mantiene la configuracion de desarrollo.
+`NODE_ENV` forma parte del archivo. En produccion activa cookies `secure` con
+`sameSite=none`; en desarrollo mantiene la configuracion local.
 
 ## Scripts
 
@@ -28,8 +22,8 @@ npm run dev
 npm start
 ```
 
-- `npm run dev` carga `.env.local` y arranca el servidor con `--watch`.
-- `npm start` carga `.env.prod` y arranca el servidor sin modo watch.
+- `npm run dev` carga `.env` y arranca el servidor con `--watch`.
+- `npm start` carga `.env` y arranca el servidor sin modo watch.
 
 ## Base de Datos
 
