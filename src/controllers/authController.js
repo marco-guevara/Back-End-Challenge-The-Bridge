@@ -5,8 +5,6 @@ const bcrypt = require("bcryptjs");
 const { createAccessToken } = require("../services/auth.services");
 const accessTokenCookieConfig = require("../config/cookie.config");
 
-// POST
-// /api/auth/register
 const register = async (req, res) => {
   const { email, name, password, confirmPassword } = req.body;
   if (!name || !email || !password || !confirmPassword) {
@@ -18,15 +16,8 @@ const register = async (req, res) => {
       });
   }
 
-  //  REGEX EMAIL (válido estándar)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // REGEX PASSWORD
-  // Mínimo 8 caracteres
-  // 1 mayúscula
-  // 1 minúscula
-  // 1 número
-  // 1 carácter especial
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._-])[A-Za-z\d@$!%*?&._-]{8,}$/;
 
@@ -69,8 +60,6 @@ const register = async (req, res) => {
   }
 };
 
-// POST
-// /api/auth/login
 const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -109,42 +98,11 @@ const login = async (req, res) => {
   }
 };
 
-// POST
-// /api/auth/logout
 const logout = (req, res) => {
   res.clearCookie("accessToken", accessTokenCookieConfig);
   return res.status(200).json({ message: "Sesión cerrada" });
 };
 
-// const changePassword = async (req, res) => {
-//   const email = req.user.email
-//   const {oldPassword, password, password2} = req.body
-
-//   try {
-//     const user = await User.findOne({where: {email}})
-
-//     const isValidPassword = await bcrypt.compare(oldPassword, user.password)
-//     if (!isValidPassword) {
-//       res.status(400).json({message: "password incorrect"})
-//     }
-
-//     if (password !== password2) {
-//       res.status(400).json({message: "passwords dosen't match"})
-//     }
-
-//     const password_hash = await bcrypt.hash(password, 10)
-
-//     await user.update({password: password_hash})
-
-//     return res.status(202).json({message: 'password changed'})
-
-//   } catch (err) {
-//     res.status(500).json({message: `Server error: ${err.message}`})
-//   }
-// }
-
-// GET
-// /api/auth/active-user
 const getActiveUser = async (req, res) => {
   res.status(200).json({
     user: {
@@ -158,6 +116,5 @@ module.exports = {
   register,
   login,
   logout,
-  // changePassword,
   getActiveUser,
 };
