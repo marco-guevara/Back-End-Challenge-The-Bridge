@@ -1,12 +1,13 @@
-const User = require("../models/User");
-
 const bcrypt = require("bcryptjs");
 
+const userRepository = require("../repositories/userRepository");
 const { createAccessToken } = require("../services/auth.services");
 const accessTokenCookieConfig = require("../config/cookie.config");
 
 const register = async (req, res) => {
   const { email, name, password, confirmPassword } = req.body;
+  const username = req.body.username || email?.split("@")[0];
+
   if (!name || !email || !password || !confirmPassword) {
     return res
       .status(400)
@@ -39,23 +40,32 @@ const register = async (req, res) => {
   }
 
   try {
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await userRepository.findByEmailOrUsername({
+      email,
+      username,
+    });
+
     if (existingUser) {
-      return res.status(400).json({ message: "Email ya registrado" });
+      return res.status(400).json({ message: "Email o usuario ya registrado" });
     }
 
-    const password_hash = await bcrypt.hash(password, 10);
+    const passwordHash = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({
+    const newUser = await userRepository.create({
+      username,
       name,
       email,
-      password: password_hash,
+      passwordHash,
     });
 
     res
       .status(201)
       .json({ message: `Usuario ${newUser.name} creado correctamente` });
   } catch (err) {
+    if (err.code === "23505") {
+      return res.status(400).json({ message: "Email o usuario ya registrado" });
+    }
+
     res.status(500).json({ message: `Error del servidor: ${err.message}` });
   }
 };
@@ -69,13 +79,13 @@ const login = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ where: { email } });
+    const user = await userRepository.findByEmail(email);
 
-    if (!user) {
+    if (!user || !user.activo) {
       return res.status(400).json({ message: "Credenciales inválidas" });
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!isValidPassword) {
       return res.status(400).json({ message: "Credenciales inválidas" });
@@ -91,6 +101,8 @@ const login = async (req, res) => {
         id: user.id,
         email: user.email,
         name: user.name,
+        username: user.username,
+        rol: user.rol,
       },
     });
   } catch (err) {
