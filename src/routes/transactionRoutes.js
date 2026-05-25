@@ -1,6 +1,7 @@
 const router = require('express').Router()
-const { getTransactions } = require('../controllers/transactionController')
+const { getTransactions, getTransactionsByClient } = require('../controllers/transactionController')
 
-router.get('/', getTransactions)
+router.get('{/:id}', getTransactions)
+router.get('/cliente/:id', getTransactionsByClient)
 
 module.exports = router

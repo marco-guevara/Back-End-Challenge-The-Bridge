@@ -15,12 +15,12 @@ const request = async (callback) => {
   }
 }
 
-const getTransactions = (query) => request(() => {
-  console.log(query)
-  return api.get(
-  `/trans/${query}`
-)})
+const getTransactions = (query) => request(() => api.get(`/trans/${query}`))
+const getTransactionById = (id) => request(() => api.get(`/trans/${id}`))
+const getTransactionByClient = (id) => request(() => api.get(`/trans/cliente/${id}`))
 
 module.exports = {
-  getTransactions
+  getTransactions,
+  getTransactionById,
+  getTransactionByClient
 }
