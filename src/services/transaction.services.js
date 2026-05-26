@@ -1,16 +1,13 @@
 const buildQuery = (query) => {
-  let res = `?limite=${query.limite}`
-  if (query.es_fraude) {
-    res += `&es_fraude=${query.es_fraude}`
-  }
-  if (query.analista) {
-    res += `&analista=${query.analista}`
-  }
-  if (query.revisado) {
-    res += `&revisado=${query.revisado}`
-  }
+  const params = new URLSearchParams()
 
-  return res
+  Object.entries(query).forEach(([key, value]) => {
+    if (value !== null && value !== undefined && value !== '') {
+      params.set(key, value)
+    }
+  })
+
+  return params.toString() ? `?${params.toString()}` : ''
 }
 
 module.exports = buildQuery
