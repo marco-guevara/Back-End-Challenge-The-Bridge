@@ -3,15 +3,17 @@ const buildQuery = require("../services/transaction.services");
 
 const getTransactions = async (req, res) => {
   const id = req.params.id;
+
   if (!id) {
     const { limite, es_fraude, analista, revisado } = req.query;
     const queryVal = {
-      limite: limite || 100,
+      limite: limite || null,
       es_fraude: es_fraude || null,
       analista: analista || null,
       revisado: revisado || null,
     };
     const query = buildQuery(queryVal);
+
     try {
       const data = await api.getTransactions(query)
       return res.status(200).json(data)
