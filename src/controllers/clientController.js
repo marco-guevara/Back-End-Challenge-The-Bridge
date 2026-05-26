@@ -31,6 +31,7 @@ const updateClient = async (req, res) => {
   }
 };
 
+// ALIAS ->
 const getClientTransactions = async (req, res) => {
   const { id } = req.params;
 
