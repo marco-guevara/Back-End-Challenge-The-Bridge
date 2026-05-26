@@ -1,7 +1,9 @@
 const axios = require('axios')
 
+const baseURL = (process.env.API_URL || '').replace(/\/$/, '')
+
 const api = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL,
   withCredentials: true
 })
 
@@ -10,7 +12,7 @@ const request = async (callback) => {
     const res = await callback()
     return res.data
   } catch (err) {
-    const message = err?.response?.data?.message || 'Ha ocorrido un erro'
+    const message = err?.response?.data?.message || err?.response?.data?.detail || 'Ha ocurrido un error'
     throw new Error(message, {cause: err})
   }
 }

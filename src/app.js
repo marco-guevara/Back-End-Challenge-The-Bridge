@@ -5,6 +5,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes")
 const transRoutes = require("./routes/transactionRoutes")
+const { authenticateJWT } = require("./middlewares/authMiddleware")
 
 const app = express();
 
@@ -32,7 +33,7 @@ app.use(cors({
 }));
 
 app.use("/api/auth", authRoutes)
-app.use("/api/trans", transRoutes)
+app.use("/api/trans", authenticateJWT, transRoutes)
 
 app.get("/", (req, res) => {
   res.status(200).json({
