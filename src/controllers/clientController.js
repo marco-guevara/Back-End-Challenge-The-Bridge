@@ -31,8 +31,20 @@ const updateClient = async (req, res) => {
   }
 };
 
+const getClientTransactions = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await api.getTransactionByClient(id);
+    return res.status(200).json(data);
+  } catch (err) {
+    return res.status(500).json({ message: `Error del servidor: ${err.message}` });
+  }
+};
+
 module.exports = {
   getClients,
   getClientById,
   updateClient,
+  getClientTransactions,
 };
