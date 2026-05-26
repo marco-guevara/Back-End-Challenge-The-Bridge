@@ -38,7 +38,19 @@ const getTransactionsByClient = async (req, res) => {
   }
 };
 
+const updateTransaction = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const data = await api.updateTransaction(id, req.body);
+    return res.status(200).json(data);
+  } catch (err) {
+    return res.status(500).json({ message: `Error del servidor: ${err.message}` });
+  }
+};
+
 module.exports = {
   getTransactions,
   getTransactionsByClient,
+  updateTransaction,
 };

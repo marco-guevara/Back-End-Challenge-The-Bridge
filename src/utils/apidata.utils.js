@@ -20,9 +20,17 @@ const request = async (callback) => {
 const getTransactions = (query) => request(() => api.get(`/trans${query}`))
 const getTransactionById = (id) => request(() => api.get(`/trans/${id}`))
 const getTransactionByClient = (id) => request(() => api.get(`/trans/cliente/${id}`))
+const updateTransaction = (id, payload) => request(() => api.patch(`/trans/update/${id}`, payload))
+const getClients = (query) => request(() => api.get('/clientes/lista', { params: query }))
+const getClientById = (id) => request(() => api.get(`/clientes/${id}`))
+const updateClient = (id, payload) => request(() => api.patch(`/clientes/update/${id}`, payload))
 
 module.exports = {
   getTransactions,
   getTransactionById,
-  getTransactionByClient
+  getTransactionByClient,
+  updateTransaction,
+  getClients,
+  getClientById,
+  updateClient
 }
