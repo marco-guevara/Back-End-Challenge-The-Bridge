@@ -1,13 +1,23 @@
 const buildQuery = (query) => {
-  const params = new URLSearchParams()
+  let res = "";
 
-  Object.entries(query).forEach(([key, value]) => {
-    if (value !== null && value !== undefined && value !== '') {
-      params.set(key, value)
-    }
-  })
+  if (query.limite) {
+    res += `${res ? "&" : "?"}limite=${query.limite}`;
+  }
 
-  return params.toString() ? `?${params.toString()}` : ''
-}
+  if (query.es_fraude) {
+    res += `${res ? "&" : "?"}es_fraude=${query.es_fraude}`;
+  }
 
-module.exports = buildQuery
+  if (query.analista) {
+    res += `${res ? "&" : "?"}analista=${query.analista}`;
+  }
+
+  if (query.revisado) {
+    res += `${res ? "&" : "?"}revisado=${query.revisado}`;
+  }
+
+  return res;
+};
+
+module.exports = buildQuery;
