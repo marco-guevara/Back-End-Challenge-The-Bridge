@@ -1,7 +1,9 @@
 const axios = require('axios')
 
+const baseURL = (process.env.API_URL || '').replace(/\/$/, '')
+
 const api = axios.create({
-  baseURL: process.env.API_URL,
+  baseURL,
   withCredentials: true
 })
 
