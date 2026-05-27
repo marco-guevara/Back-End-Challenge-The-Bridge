@@ -1,0 +1,38 @@
+const axios = require('axios')
+
+const baseURL = (process.env.API_URL || '').replace(/\/$/, '')
+
+const api = axios.create({
+  baseURL,
+  withCredentials: true
+})
+
+const request = async (callback) => {
+  try {
+    const res = await callback()
+    return res.data
+  } catch (err) {
+    const message = err?.response?.data?.message || 'Ha ocurrido un error'
+    throw new Error(message, {cause: err})
+  }
+}
+
+const getDashboardStats = () => request(() => api.get("/trans/stats/dashboard"));
+const getTransactions = (query) => request(() => api.get(`/trans${query}`))
+const getTransactionById = (id) => request(() => api.get(`/trans/${id}`))
+const getTransactionByClient = (id) => request(() => api.get(`/trans/cliente/${id}`))
+const updateTransaction = (id, payload) => request(() => api.patch(`/trans/update/${id}`, payload))
+const getClients = (query) => request(() => api.get('/clientes/lista', { params: query }))
+const getClientById = (id) => request(() => api.get(`/clientes/${id}`))
+const updateClient = (id, payload) => request(() => api.patch(`/clientes/update/${id}`, payload))
+
+module.exports = {
+  getDashboardStats,
+  getTransactions,
+  getTransactionById,
+  getTransactionByClient,
+  updateTransaction,
+  getClients,
+  getClientById,
+  updateClient
+}

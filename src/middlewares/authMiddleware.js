@@ -23,6 +23,17 @@ const authenticateJWT = (req, res, next) => {
   });
 };
 
+const authenticateRole = (req, res, next) => {
+  if (req.user.role !== "Admin") {
+    return res.status(403).json({
+        message: "Acceso prohibido: no tiene las credenciales para acceder al contenido",
+      })
+  }
+
+  return next()
+}
+
 module.exports = {
   authenticateJWT,
+  authenticateRole
 };
