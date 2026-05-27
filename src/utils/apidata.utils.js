@@ -17,6 +17,7 @@ const request = async (callback) => {
   }
 }
 
+const getDashboardStats = () => request(() => api.get("/trans/stats/dashboard"));
 const getTransactions = (query) => request(() => api.get(`/trans${query}`))
 const getTransactionById = (id) => request(() => api.get(`/trans/${id}`))
 const getTransactionByClient = (id) => request(() => api.get(`/trans/cliente/${id}`))
@@ -26,6 +27,7 @@ const getClientById = (id) => request(() => api.get(`/clientes/${id}`))
 const updateClient = (id, payload) => request(() => api.patch(`/clientes/update/${id}`, payload))
 
 module.exports = {
+  getDashboardStats,
   getTransactions,
   getTransactionById,
   getTransactionByClient,

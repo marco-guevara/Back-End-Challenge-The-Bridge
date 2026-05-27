@@ -51,7 +51,19 @@ const updateTransaction = async (req, res) => {
   }
 };
 
+const getDashboardStats = async (req, res) => {
+  try {
+    const data = await api.getDashboardStats();
+    return res.status(200).json(data);
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: `Error del servidor: ${err.message}` });
+  }
+};
+
 module.exports = {
+  getDashboardStats,
   getTransactions,
   getTransactionsByClient,
   updateTransaction,
